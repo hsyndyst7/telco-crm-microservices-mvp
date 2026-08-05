@@ -8,11 +8,19 @@ import com.telcox.customer.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class CustomerService {
 
     private final CustomerRepository customerRepository;
+
+    public List<CustomerResponse> getAllCustomers() {
+        return customerRepository.findAll().stream()
+                .map(this::mapToResponse)
+                .toList();
+    }
 
     public CustomerResponse createCustomer(CustomerCreateRequest request) {
         if (customerRepository.existsByIdentityNumber(request.getIdentityNumber())) {
